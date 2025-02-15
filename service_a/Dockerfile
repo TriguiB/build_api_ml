@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Install FastAPI, Uvicorn, and httpx
-RUN pip install fastapi uvicorn httpx
+RUN pip install fastapi uvicorn httpx pytest
 # Copy the application code
 COPY main.py /app/main.py
 # Set the working directory to /app

@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Install FastAPI and Uvicorn
-RUN pip install fastapi uvicorn
+RUN pip install fastapi uvicorn pytest
 # Copy the application code
 COPY main.py /app/main.py
 # Set the working directory to /app
