@@ -1,0 +1,40 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Étape 1 : Vérifier le code source
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Étape 2 : Configurer Docker
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    # Étape 3 : Construire les services Docker
+    - name: Build Docker images
+      run: docker-compose build
+
+    # Étape 4 : Lancer les tests
+    - name: Run tests
+      run: |
+        docker-compose up -d
+        docker-compose exec service_a pytest  # Exemple pour tester service_a
+        docker-compose down
+
+    # Étape 5 : Pousser les images Docker (optionnel)
+    - name: Push Docker images
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker-compose push
+ 
