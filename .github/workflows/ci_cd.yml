@@ -26,8 +26,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        run pip install fastapi uvicorn httpx pytest
+        pip install fastapi uvicorn pytest httpx  # Installe les dépendances nécessaires
+
     # Étape 3 : Exécuter les tests
     - name: Run tests
-      run: |
-        pytest
+      run: pytest service_a\test_main.py
