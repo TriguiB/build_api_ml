@@ -30,4 +30,5 @@ jobs:
 
     # Étape 3 : Exécuter les tests
     - name: Run tests
-      run: pytest ..\service_a\test_main.py
+      run: pytest service_a/test_main.py
+
