@@ -5,6 +5,7 @@ FROM python:3.11-slim
 RUN pip install fastapi uvicorn httpx pytest
 # Copy the application code
 COPY main.py /app/main.py
+COPY test_main.py /app/test_main.py
 # Set the working directory to /app
 WORKDIR /app
 # Expose UDS path as a volume
