@@ -24,7 +24,7 @@ jobs:
         sudo chmod +x /usr/local/bin/docker-compose
         docker-compose --version
 
-    # Étape 3 : Configurer Docker
+    # Étape 3 : Configurer Docker Buildx
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
 
@@ -33,15 +33,18 @@ jobs:
       run: docker-compose build
 
     # Étape 5 : Lancer les tests
-    - name: Run tests
+    - name: Run tests for service_a
       run: |
         docker-compose up -d
-        docker-compose exec service_a pytest  # Exemple pour tester service_a
+        docker-compose exec service_a pytest
         docker-compose down
 
     # Étape 6 : Pousser les images Docker (optionnel)
     - name: Push Docker images
       if: success()
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
         docker-compose push
