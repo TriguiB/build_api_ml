@@ -17,11 +17,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Étape 2 : Installer Docker et Docker Compose
+    # Étape 2 : Installer Docker Compose manuellement
     - name: Install Docker Compose
       run: |
-        sudo apt-get update
-        sudo apt-get install -y docker-compose-plugin
+        sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+        docker-compose --version
 
     # Étape 3 : Configurer Docker
     - name: Set up Docker Buildx
