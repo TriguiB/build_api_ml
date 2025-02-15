@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build-test-deploy:
+  run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,34 +17,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    # Étape 2 : Installer Docker Compose manuellement
-    - name: Install Docker Compose
+    # Étape 2 : Installer les dépendances Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
       run: |
-        sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        docker-compose --version
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Remplacez par vos dépendances si nécessaire
 
-    # Étape 3 : Configurer Docker Buildx
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
-
-    # Étape 4 : Construire les services Docker
-    - name: Build Docker images
-      run: docker-compose build
-
-    # Étape 5 : Lancer les tests
-    - name: Run tests for service_a
+    # Étape 3 : Exécuter les tests
+    - name: Run tests
       run: |
-        docker-compose up -d
-        docker-compose exec service_a pytest
-        docker-compose down
-
-    # Étape 6 : Pousser les images Docker (optionnel)
-    - name: Push Docker images
-      if: success()
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
-        docker-compose push
+        pytest
