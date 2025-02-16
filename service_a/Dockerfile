@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Install FastAPI, Uvicorn, and httpx
-RUN pip install fastapi uvicorn httpx pytest
+RUN pip install fastapi uvicorn httpx pytest motor pymongo
 # Copy the application code
 COPY main.py /app/main.py
 COPY test_main.py /app/test_main.py
