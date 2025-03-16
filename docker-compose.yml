@@ -1,47 +1,40 @@
-
 services:
   mongo:
-    image: mongo:6.0      
+    image: mongo:6.0
     container_name: mongodb_container
     ports:
-      - "27017:27017"     
+      - "27017:27017"
     volumes:
-      - mongo_data:/data/db  
+      - mongo_data:/data/db
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin       
-      MONGO_INITDB_ROOT_PASSWORD: password    
-    restart: always        
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    restart: always
 
-  # Service B
-  service_b:
-    build:
-      context: ./service_b
-    volumes:
-      - /tmp:/tmp         
-    restart: always        
-
-  # Service A
   service_a:
     build:
       context: ./service_a
     volumes:
-      - /tmp:/tmp          
+      - /tmp:/tmp
     ports:
-      - "8000:8000"        
-    depends_on:
-      - service_b         
-      - mongo              
-    environment:
-      MONGO_URI: mongodb://admin:password@mongo:27017  
-    restart: always        
+      - "8000:8000"  
+    restart: always
+
+  service_b:
+    build:
+      context: ./service_b
+    volumes:
+      - /tmp:/tmp
+    ports:
+      - "8001:8001"  
+    restart: always
+
   service-ui:
     build:
       context: ./service-ui
     ports:
       - "3000:80"
-    depends_on:
-      - service_a
     restart: always
+
 volumes:
   mongo_data:
-

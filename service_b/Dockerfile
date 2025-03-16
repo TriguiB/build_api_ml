@@ -1,13 +1,11 @@
-# Use a lightweight Python image
 FROM python:3.11-slim
 
-# Install FastAPI and Uvicorn
 RUN pip install fastapi uvicorn pytest motor pymongo
-# Copy the application code
+RUN apt-get update && apt-get install -y socat
+
 COPY main.py /app/main.py
-# Set the working directory to /app
 WORKDIR /app
-# Expose UDS path as a volume
 VOLUME ["/tmp"]
-# Run Uvicorn using the Unix Domain Socket
-CMD ["uvicorn", "main:app", "--uds", "/tmp/service_b.sock"]
+
+CMD ["sh", "-c", "socat TCP-LISTEN:8001,fork UNIX-CONNECT:/tmp/service_b.sock & uvicorn main:app --uds /tmp/service_b.sock"]
+

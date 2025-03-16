@@ -7,6 +7,9 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
+# Installer Material-UI et ses dépendances
+RUN npm install @mui/material @emotion/react @emotion/styled
+
 # Copier tout le projet
 COPY . .
 
