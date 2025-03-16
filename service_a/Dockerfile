@@ -1,4 +1,4 @@
-# Use a lightweight Python image
+# docker file service A
 FROM python:3.11-slim
 
 # Install FastAPI, Uvicorn, and httpx
